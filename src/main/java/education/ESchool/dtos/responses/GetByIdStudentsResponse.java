@@ -9,7 +9,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetByIdStudentsResponse {
 
+    private String studentName;
+
+    private int studentNumber;
+
     private String lessonName;
 
-    private double lessonPoints;
+    private int firstExamPoints;
+
+    private int secondExamPoints;
+
+    private int averagePoints;
+
+    private int absenteeism;
+
+
 }

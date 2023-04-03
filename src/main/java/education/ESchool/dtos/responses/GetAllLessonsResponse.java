@@ -12,4 +12,6 @@ public class GetAllLessonsResponse {
     private int lessonId;
 
     private String lessonName;
+
+
 }

@@ -1,2 +1,14 @@
-package education.ESchool.result;public class SuccessResult {
+package education.ESchool.result;
+
+public class SuccessResult extends Result{
+
+
+    public SuccessResult(){
+        super(true);
+    }
+
+    public SuccessResult(String message) {
+        super(true, message);
+    }
+
 }

@@ -1,4 +1,4 @@
-package education.ESchool.dtos.requests;
+package education.ESchool.dtos.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateStudentLessonRequest {
-
-    private int lessonId;
+public class GetByIdStudentLessonResponses {
 
     private int studentId;
 
-    private int point1;
+    private int lessonId;
 
-    private int point2;
+    private double grade;
+
+
 }

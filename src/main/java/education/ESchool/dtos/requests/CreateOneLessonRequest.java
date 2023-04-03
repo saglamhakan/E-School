@@ -9,14 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateOneLessonRequest {
 
-    private int lessonId;
+
     private String lessonName;
 
-    private double lessonPoints;
 
-    private int studentId;
-
-    private String studentName;
     
 
 

@@ -10,14 +10,14 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateStudentLesson {
+public class CreateStudentLessonRequest {
 
     private LocalDate enrollmentDate;
     private double grade;
     private int lesson_id;
     private int student_id;
 
-    private double point1;
+    private int point1;
 
-    private double point2;
+    private int point2;
 }

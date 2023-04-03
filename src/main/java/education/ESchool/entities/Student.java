@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 public class Student {
     
     @Id
@@ -23,9 +24,8 @@ public class Student {
     
     private int studentNumber;
 
- //  @OneToMany(mappedBy = "student")
- //   public List<Lesson> lessons;
-
+    @ManyToMany(mappedBy = "students")
+    private List<Lesson> lessons=new ArrayList<>();
 
     
 }

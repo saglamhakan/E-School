@@ -5,6 +5,9 @@ import education.ESchool.dtos.requests.CreateOneStudentRequest;
 import education.ESchool.dtos.responses.GetAllStudentsResponse;
 import education.ESchool.entities.Student;
 import education.ESchool.mappers.ModelMapperService;
+import education.ESchool.result.*;
+import education.ESchool.rules.StudentBusinessRules;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,39 +18,55 @@ import java.util.stream.Collectors;
 
 public class StudentService {
 
-    private StudentRepository studentRepository;
-    private ModelMapperService modelMapperService;
+    private final StudentRepository studentRepository;
+    private final ModelMapperService modelMapperService;
+
+    private final StudentBusinessRules studentBusinessRules;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, ModelMapperService modelMapperService){
+    public StudentService(StudentRepository studentRepository, ModelMapperService modelMapperService, StudentBusinessRules studentBusinessRules){
         this.studentRepository=studentRepository;
         this.modelMapperService=modelMapperService;
+        this.studentBusinessRules=studentBusinessRules;
     }
 
-    public List<GetAllStudentsResponse> findAll() {
+    public DataResult<List<GetAllStudentsResponse>> findAll() {
 
         List<Student> students=studentRepository.findAll();
         List<GetAllStudentsResponse> getAllStudentsResponses=students.stream().map(student -> this.modelMapperService.forResponse()
                 .map(student, GetAllStudentsResponse.class)).collect(Collectors.toList());
 
-        return getAllStudentsResponses;
+        return new SuccessDataResult<List<GetAllStudentsResponse>>
+                (getAllStudentsResponses,true,"Students successfully listed");
 
     }
 
-    public Student add(CreateOneStudentRequest createOneStudentRequest) {
-        Student student=this.modelMapperService.forRequest().map(createOneStudentRequest,Student.class);
-        return this.studentRepository.save(student);
+    public Student getById(int studentId){
+        return this.studentRepository.findById(studentId).orElse(null);
     }
 
-/*
-    public Student getByStudentId(int studentId) {
-       return this.studentRepository.getByStudent_StudentId(studentId);
-    }
+    public Result add(CreateOneStudentRequest createOneStudentRequest) {
+        if (this.validateRequest(createOneStudentRequest)){
+            Student student=this.modelMapperService.forRequest().map(createOneStudentRequest,Student.class);
+            this.studentBusinessRules.existsByStudentNumber(createOneStudentRequest.getStudentNumber());
+            return new SuccessResult("Student successfully added");
+        }else
+            return new ErrorResult(false,"Student could not added");
 
- */
+    }
 
 
     public void deleteById(int studentId) {
         this.studentRepository.deleteById(studentId);
+    }
+
+    private boolean validateRequest(CreateOneStudentRequest createOneStudentRequest) {
+        boolean isSuccess = true;
+
+        if (StringUtils.isEmpty(createOneStudentRequest.getStudentName())) {
+            isSuccess = false;
+
+        }
+        return isSuccess;
     }
 }

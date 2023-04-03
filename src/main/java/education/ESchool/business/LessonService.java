@@ -3,55 +3,73 @@ package education.ESchool.business;
 import education.ESchool.dataAccess.LessonRepository;
 import education.ESchool.dtos.requests.CreateOneLessonRequest;
 import education.ESchool.dtos.responses.GetAllLessonsResponse;
-import education.ESchool.dtos.responses.GetByIdStudentsResponse;
 import education.ESchool.entities.Lesson;
 import education.ESchool.mappers.ModelMapperService;
+import education.ESchool.result.*;
+import education.ESchool.rules.LessonBusinessRules;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-
 public class LessonService {
 
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
 
-    private ModelMapperService modelMapperService;
+    private final ModelMapperService modelMapperService;
+
+    private final LessonBusinessRules lessonBusinessRules;
 
     @Autowired
-    public LessonService(LessonRepository lessonRepository, ModelMapperService modelMapperService){
+    public LessonService(LessonRepository lessonRepository, ModelMapperService modelMapperService, LessonBusinessRules lessonBusinessRules){
         this.lessonRepository=lessonRepository;
         this.modelMapperService=modelMapperService;
+        this.lessonBusinessRules=lessonBusinessRules;
     }
 
-    public List<GetAllLessonsResponse> getAll( ) {
+    public DataResult<List<GetAllLessonsResponse>> getAll( ) {
 
         List<Lesson> lessons=lessonRepository.findAll();
         List<GetAllLessonsResponse> getAllLessonsResponses=lessons.stream().map(lesson -> this.modelMapperService.forResponse()
                 .map(lesson, GetAllLessonsResponse.class)).collect(Collectors.toList());
-       return getAllLessonsResponses;
+       return new SuccessDataResult<List<GetAllLessonsResponse>>
+               (getAllLessonsResponses,true,"Lessons successfully listed");
     }
 
-    public Lesson saveOneLesson(CreateOneLessonRequest createOneLessonRequest) {
+    public Result saveOneLesson(CreateOneLessonRequest createOneLessonRequest) {
+        if (this.validateRequest(createOneLessonRequest)){
+            Lesson lesson=this.modelMapperService.forRequest().map(createOneLessonRequest, Lesson.class);
+            this.lessonBusinessRules.existsByLessonId(lesson.getLessonId());
+            lessonRepository.save(lesson);
 
-        Lesson lesson=this.modelMapperService.forRequest().map(createOneLessonRequest, Lesson.class);
+            return new SuccessResult("Lesson successfully added");
+        }else
+            return new ErrorResult(false,"Lesson could not be added");
 
-        return lessonRepository.save(lesson);
     }
 
-    public List<GetByIdStudentsResponse> getByStudentId(int studentId) {
-        List<Lesson> lessons=lessonRepository.findByStudent_StudentId(studentId);
+    public Lesson findByLessonId(int lessonId){
+        return lessonRepository.findByLessonId(lessonId);
 
-        List<GetByIdStudentsResponse> getByIdStudentsResponses=lessons.stream().map(lesson -> this.modelMapperService.forResponse()
-                .map(lesson, GetByIdStudentsResponse.class)).collect(Collectors.toList());
-        return getByIdStudentsResponses;
     }
 
 
     public void deleteById(int lessonId) {
         this.lessonRepository.deleteById(lessonId);
+    }
+
+    private boolean validateRequest(CreateOneLessonRequest createOneLessonRequest) {
+        boolean isSuccess = true;
+
+        if (StringUtils.isEmpty(createOneLessonRequest.getLessonName())) {
+            isSuccess = false;
+
+        }
+        return isSuccess;
     }
 
 }

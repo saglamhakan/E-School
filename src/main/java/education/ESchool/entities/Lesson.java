@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,13 +21,10 @@ public class Lesson {
 
     private String lessonName;
 
-    private double lessonPoints;
-
-    private String studentName;
-
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @ManyToMany
+    @JoinTable(name = "student_lesson",joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Student> students=new ArrayList<>();
 
 
 }

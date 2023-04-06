@@ -20,4 +20,7 @@ public class GetAllStudentLessonResponses {
     private int point1;
 
     private int point2;
+
+    private int discontinuity;
+
 }

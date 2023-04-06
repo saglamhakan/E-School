@@ -39,4 +39,7 @@ public class StudentLesson {
     @Column(name = "grade")
     private double grade;
 
+    @Column(name = "discontinuity")
+    private int discontinuity;
+
 }

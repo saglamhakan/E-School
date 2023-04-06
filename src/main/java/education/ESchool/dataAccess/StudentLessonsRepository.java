@@ -1,7 +1,6 @@
 package education.ESchool.dataAccess;
 
 import education.ESchool.entities.StudentLesson;
-import education.ESchool.result.Result;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +9,4 @@ public interface StudentLessonsRepository extends JpaRepository<StudentLesson, I
 
     StudentLesson findByStudent_StudentIdAndLesson_LessonId(int studentId, int lessonId);
 
-    boolean existsByGrade(double grade);
 }

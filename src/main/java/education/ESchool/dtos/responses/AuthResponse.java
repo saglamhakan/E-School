@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetByIdStudentLessonResponses {
+public class AuthResponse {
 
-    private int studentId;
+    private String studentName;
 
-    private int lessonId;
+    private int studentNumber;
 
-    private double grade;
-
-    private int discontinuity;
-
-
+    String message;
+    int studentId;
+    String accessToken;
 }

@@ -63,7 +63,8 @@ public class StudentLessonService {
     public GetByIdStudentLessonResponses getById(int studentLessonId) {
         StudentLesson studentLesson=studentLessonsRepository.findById(studentLessonId).orElse(null);
         GetByIdStudentLessonResponses getByIdStudentLessonResponses=this.modelMapperService.forResponse().map(studentLesson,GetByIdStudentLessonResponses.class);
-        this.studentLessonBusinessRules.existsByGrade(getByIdStudentLessonResponses.getGrade());
+        this.studentLessonBusinessRules.existsByGradeAndDiscontinuity(studentLesson.getGrade(),studentLesson.getDiscontinuity());
+
         return getByIdStudentLessonResponses;
 
     }
@@ -91,7 +92,7 @@ public class StudentLessonService {
         studentLesson.setPoint2(point2);
         studentLesson.setGrade(this.calculateGrade(point1, point2));
 
-
+        this.studentLessonBusinessRules.existsByPoints(point1,point2);
         this.studentLessonsRepository.save(studentLesson);
     }
 

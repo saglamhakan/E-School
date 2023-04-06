@@ -16,8 +16,8 @@ public class CreateStudentLessonRequest {
     private double grade;
     private int lesson_id;
     private int student_id;
-
     private int point1;
-
     private int point2;
+    private int discontinuity;
+
 }

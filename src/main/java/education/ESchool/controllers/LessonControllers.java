@@ -2,6 +2,7 @@ package education.ESchool.controllers;
 
 import education.ESchool.business.LessonService;
 import education.ESchool.dtos.requests.CreateOneLessonRequest;
+import education.ESchool.dtos.requests.UpdateLessonRequest;
 import education.ESchool.dtos.responses.GetAllLessonsResponse;
 import education.ESchool.entities.Lesson;
 import education.ESchool.result.DataResult;
@@ -27,10 +28,14 @@ public class LessonControllers {
        return this.lessonService.saveOneLesson(createOneLessonRequest);
     }
 
-
     @DeleteMapping("/delete")
     public void deleteById(@RequestParam int lessonId){
         this.lessonService.deleteById(lessonId);
+    }
+
+    @PutMapping("/{lesson}")
+    public Lesson update( @RequestBody UpdateLessonRequest updateLessonRequest){
+       return this.lessonService.update(updateLessonRequest);
     }
 
 

@@ -33,4 +33,8 @@ public class StudentControllers {
         this.studentService.deleteById(studentId);
     }
 
+    @GetMapping("/studentName")
+    public Student getOneStudentByStudentName(String studentName) {
+        return studentService.getOneStudentByStudentName(studentName);
+    }
 }

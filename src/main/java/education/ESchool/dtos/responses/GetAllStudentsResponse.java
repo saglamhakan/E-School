@@ -13,7 +13,7 @@ public class GetAllStudentsResponse {
 
     private String studentName;
 
-    private int studentNumber;
+    private String studentNumber;
 
 
 }

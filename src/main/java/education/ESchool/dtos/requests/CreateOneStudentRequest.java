@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CreateOneStudentRequest {
 
     private String studentName;
-    private int studentNumber;
+    private String studentNumber;
 }

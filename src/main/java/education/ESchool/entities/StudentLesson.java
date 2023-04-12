@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+
 
 @Data
 @Entity
@@ -16,7 +16,7 @@ import java.util.Date;
 public class StudentLesson {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int Id;
 
     @ManyToOne(fetch = FetchType.EAGER)

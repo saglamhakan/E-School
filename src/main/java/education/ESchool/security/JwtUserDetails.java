@@ -1,5 +1,7 @@
 package education.ESchool.security;
 
+import education.ESchool.dtos.requests.StudentRequest;
+import education.ESchool.entities.Student;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,21 +27,20 @@ public class JwtUserDetails implements UserDetails {
 
     public Collection<? extends GrantedAuthority> Authorities;
 
-    private JwtUserDetails(String userName, String password, Collection<? extends GrantedAuthority> authorities){
+    JwtUserDetails(Long userId, String userName, String password, Collection<? extends GrantedAuthority> authorities){
         this.username=userName;
         this.password=password;
         this.Authorities=authorities;
+        this.userId=userId;
 
     }
 
-    public static JwtUserDetails create(User user) {
+    public static JwtUserDetails create(Student student) {
         List<GrantedAuthority> authoriesList = new ArrayList<>();
         authoriesList.add(new SimpleGrantedAuthority("user"));
-        return new JwtUserDetails(user.getUsername(), user.getPassword(), authoriesList);
+        return new JwtUserDetails((long) student.getStudentId(), student.getStudentName(), student.getStudentNumber(), authoriesList);
 
     }
-
-
 
     @Override
     public boolean isAccountNonExpired() {

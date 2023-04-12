@@ -1,6 +1,6 @@
 package education.ESchool.config;
 
-import education.ESchool.business.UserDetailsServiceImp;
+import education.ESchool.business.StudentDetailsService;
 import education.ESchool.dataAccess.StudentRepository;
 import education.ESchool.security.JwtAuthenticationEntryPoint;
 import education.ESchool.security.JwtAuthenticationFilter;
@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,7 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsServiceImp userDetailsService;
+    private final StudentDetailsService userDetailsService;
 
     private final JwtAuthenticationEntryPoint handler;
 
@@ -34,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    public SecurityConfig(UserDetailsServiceImp userDetailsService,
+    public SecurityConfig(StudentDetailsService userDetailsService,
                           JwtAuthenticationEntryPoint handler, StudentRepository studentRepository) {
         this.userDetailsService = userDetailsService;
         this.handler = handler;
@@ -63,7 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
 
     @Bean
     public CorsFilter corsFilter() {
@@ -97,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/**")
                 .permitAll()
                 .antMatchers("/**").permitAll()
-                // .antMatchers("/admin/**")
+                //.antMatchers("/admin/**")
                 //.hasAnyAuthority("admin")
                 .anyRequest().authenticated();
 

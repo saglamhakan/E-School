@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthResponse {
 
-    private String studentName;
-
-    private int studentNumber;
-
     String message;
     int studentId;
     String accessToken;
+
+
+
 }

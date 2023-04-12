@@ -22,10 +22,11 @@ public class Student {
     
     private String studentName;
     
-    private int studentNumber;
+    private String studentNumber;
 
     @ManyToMany(mappedBy = "students")
     private List<Lesson> lessons=new ArrayList<>();
 
-    
+
+
 }

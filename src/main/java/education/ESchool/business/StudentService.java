@@ -30,6 +30,10 @@ public class StudentService {
         this.studentBusinessRules=studentBusinessRules;
     }
 
+    public Student getOneStudentByStudentName(String studentName) {
+        return studentRepository.findByStudentName(studentName);
+    }
+
     public DataResult<List<GetAllStudentsResponse>> findAll() {
 
         List<Student> students=studentRepository.findAll();
@@ -41,32 +45,26 @@ public class StudentService {
 
     }
 
-    public Student getById(int studentId){
+    public Student getStudentById(int studentId){
         return this.studentRepository.findById(studentId).orElse(null);
     }
 
-    public Result add(CreateOneStudentRequest createOneStudentRequest) {
-        if (this.validateRequest(createOneStudentRequest)){
-            Student student=this.modelMapperService.forRequest().map(createOneStudentRequest,Student.class);
+    public  DataResult<Student> add(CreateOneStudentRequest createOneStudentRequest) {
+        Student student=new Student();
+        if (this.studentBusinessRules.validateRequest(createOneStudentRequest)) {
+            student = this.modelMapperService.forRequest().map(createOneStudentRequest, Student.class);
             this.studentBusinessRules.existsByStudentNumber(createOneStudentRequest.getStudentNumber());
-            return new SuccessResult("Student successfully added");
-        }else
-            return new ErrorResult(false,"Student could not added");
-
+            this.studentRepository.save(student);
+            return new SuccessDataResult<Student>(student,true,"Student successfully added");
+        }
+            return new ErrorDataResult<Student>(student,"Student could not added");
     }
-
 
     public void deleteById(int studentId) {
         this.studentRepository.deleteById(studentId);
     }
 
-    private boolean validateRequest(CreateOneStudentRequest createOneStudentRequest) {
-        boolean isSuccess = true;
 
-        if (StringUtils.isEmpty(createOneStudentRequest.getStudentName())) {
-            isSuccess = false;
 
-        }
-        return isSuccess;
-    }
+
 }

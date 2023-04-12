@@ -1,15 +1,15 @@
 package education.ESchool.result;
 
 public class ErrorDataResult<T> extends DataResult<T>{
-    public ErrorDataResult(T data, boolean success, String message) {
+    public ErrorDataResult(T data, String message) {
         super(data, false, message);
     }
 
-    public ErrorDataResult(T data, boolean success) {
+    public ErrorDataResult(T data) {
         super(data, false);
     }
 
-    public ErrorDataResult(boolean success, String message) {
+    public ErrorDataResult(String message) {
         super(false, message);
     }
 

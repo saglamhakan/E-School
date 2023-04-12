@@ -2,6 +2,7 @@ package education.ESchool.controllers;
 
 import education.ESchool.business.StudentService;
 import education.ESchool.dataAccess.StudentRepository;
+import education.ESchool.dtos.requests.CreateOneStudentRequest;
 import education.ESchool.dtos.requests.StudentRequest;
 import education.ESchool.dtos.responses.AuthResponse;
 import education.ESchool.entities.Student;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthControllers {
 
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final StudentService studentService;
@@ -48,7 +49,7 @@ public class AuthControllers {
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
 
-        Student user = StudentRepository.getOneStudentByStudentName(loginRequest.getStudentName());
+        Student student = studentService.getOneStudentByStudentName(loginRequest.getStudentName());
         AuthResponse authResponse = new AuthResponse();
         authResponse.setAccessToken("Bearer " + jwtToken);
         authResponse.setMessage("User login success");
@@ -57,16 +58,16 @@ public class AuthControllers {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody StudentRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@RequestBody CreateOneStudentRequest registerRequest) {
         AuthResponse authResponse = new AuthResponse();
-        if (StudentRepository.getOneStudentByStudentName(registerRequest.getStudentName()) != null) {
+        if (studentService.getOneStudentByStudentName(registerRequest.getStudentName()) != null) {
             authResponse.setMessage("Username already in use");
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
-        StudentRequest student = new StudentRequest();
-        student.setStudentName(registerRequest.getStudentName());
-        student.setStudentNumber((registerRequest.getStudentNumber()));
-        studentRepository.save(new Student());
+        CreateOneStudentRequest studentRequest = new CreateOneStudentRequest();
+        studentRequest.setStudentName(registerRequest.getStudentName());
+        studentRequest.setStudentNumber(passwordEncoder.encode(registerRequest.getStudentNumber()));
+        Student student = studentService.add(studentRequest).getData();
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getStudentName(), registerRequest.getStudentNumber());
         Authentication auth = authenticationManager.authenticate(authToken);
@@ -75,7 +76,7 @@ public class AuthControllers {
 
         authResponse.setMessage("User successfully registered");
         authResponse.setAccessToken("Bearer " + jwtToken);
-        authResponse.setStudentId(authResponse.getStudentId());//hata olursa bak
+        authResponse.setStudentId(student.getStudentId());//hata olursa bak
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 }

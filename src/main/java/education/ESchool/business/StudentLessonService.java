@@ -52,7 +52,7 @@ public class StudentLessonService {
 
     public Result add(CreateStudentLessonRequest createStudentLessonRequest) {
         StudentLesson studentLesson = this.modelMapperService.forRequest().map(createStudentLessonRequest, StudentLesson.class);
-        Student student = studentService.getById(createStudentLessonRequest.getStudent_id());
+        Student student = studentService.getStudentById(createStudentLessonRequest.getStudent_id());
         Lesson lesson = lessonService.findByLessonId(createStudentLessonRequest.getLesson_id());
         studentLesson.setStudent(student);
         studentLesson.setLesson(lesson);

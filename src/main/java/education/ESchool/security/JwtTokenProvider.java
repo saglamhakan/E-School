@@ -1,11 +1,15 @@
 package education.ESchool.security;
 
+import education.ESchool.dataAccess.StudentRepository;
+import education.ESchool.entities.Student;
 import io.jsonwebtoken.*;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
+
 import java.util.Date;
 
 @Component
@@ -16,6 +20,9 @@ public class JwtTokenProvider {
 
     @Value("${E-School.expires.in}")
     private Long EXPIRES_IN;
+    @Autowired
+    private StudentRepository studentRepository;
+
 
 
     public String generateJwtToken(Authentication auth) {
@@ -53,9 +60,10 @@ public class JwtTokenProvider {
         return expiration.before(new Date());
     }
 
-    public String generateJwtTokenByUserName(Long userId) {
+    public String generateJwtTokenByStudentName(String studentName) {
+        Student student = studentRepository.findByStudentName(studentName);
         Date expireDate = new Date(new Date().getTime() + EXPIRES_IN);
-        return Jwts.builder().setSubject(Long.toString(userId))
+        return Jwts.builder().setSubject(Long.toString(student.getStudentId()))
                 .setIssuedAt(new Date()).setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, APP_SECRET).compact();
     }

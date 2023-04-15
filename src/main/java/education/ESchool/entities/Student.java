@@ -24,6 +24,8 @@ public class Student {
     
     private String studentNumber;
 
+    private String password;
+
     @ManyToMany(mappedBy = "students")
     private List<Lesson> lessons=new ArrayList<>();
 

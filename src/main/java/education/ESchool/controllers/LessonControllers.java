@@ -33,9 +33,9 @@ public class LessonControllers {
         this.lessonService.deleteById(lessonId);
     }
 
-    @PutMapping("/{lesson}")
-    public Lesson update( @RequestBody UpdateLessonRequest updateLessonRequest){
-       return this.lessonService.update(updateLessonRequest);
+    @PutMapping("/{lessonId}")
+    public Lesson update(@PathVariable int lessonId, @RequestBody UpdateLessonRequest updateLessonRequest){
+       return this.lessonService.update(lessonId,updateLessonRequest);
     }
 
 

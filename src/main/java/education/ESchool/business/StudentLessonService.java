@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,12 +63,12 @@ public class StudentLessonService {
 
     public GetByIdStudentLessonResponses getById(int studentLessonId) {
         StudentLesson studentLesson=studentLessonsRepository.findById(studentLessonId).orElse(null);
-        GetByIdStudentLessonResponses getByIdStudentLessonResponses=this.modelMapperService.forResponse().map(studentLesson,GetByIdStudentLessonResponses.class);
-        this.studentLessonBusinessRules.existsByGradeAndDiscontinuity(studentLesson.getGrade(),studentLesson.getDiscontinuity());
+            GetByIdStudentLessonResponses getByIdStudentLessonResponses = this.modelMapperService.forResponse().map(studentLesson, GetByIdStudentLessonResponses.class);
+            this.studentLessonBusinessRules.existsByGradeAndDiscontinuity(studentLesson.getGrade(), studentLesson.getDiscontinuity());
 
-        return getByIdStudentLessonResponses;
+            return getByIdStudentLessonResponses;
+        }
 
-    }
 
     public void deleteById(int id) {
         studentLessonsRepository.deleteById(id);

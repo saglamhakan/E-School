@@ -5,6 +5,7 @@ import education.ESchool.dtos.requests.CreateOneLessonRequest;
 import education.ESchool.dtos.requests.UpdateLessonRequest;
 import education.ESchool.dtos.responses.GetAllLessonsResponse;
 import education.ESchool.entities.Lesson;
+import education.ESchool.exception.BusinessException;
 import education.ESchool.mappers.ModelMapperService;
 import education.ESchool.result.*;
 import education.ESchool.rules.LessonBusinessRules;
@@ -63,9 +64,15 @@ public class LessonService {
         this.lessonRepository.deleteById(lessonId);
     }
 
-    public Lesson update( UpdateLessonRequest updateLessonRequest) {
-        Lesson lesson = this.modelMapperService.forRequest().map(updateLessonRequest, Lesson.class);
-        return this.lessonRepository.save(lesson);
+    public Lesson update(int lessonId, UpdateLessonRequest updateLessonRequest) {
+      Optional<Lesson> lesson = lessonRepository.findById(lessonId);
+      if (lesson.isPresent()){
+          Lesson toUpdate=lesson.get();
+          toUpdate.setLessonName(updateLessonRequest.getLessonName());
+          this.lessonRepository.save(toUpdate);
+          return toUpdate;
+      }
+        throw new BusinessException("Lesson could not found");
     }
 
 

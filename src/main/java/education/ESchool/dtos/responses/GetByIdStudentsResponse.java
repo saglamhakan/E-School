@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetByIdStudentsResponse {
 
+    private int studentId;
     private String studentName;
 
-    private int studentNumber;
+    private String studentNumber;
 
     private String lessonName;
 

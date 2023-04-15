@@ -11,4 +11,5 @@ public class CreateOneStudentRequest {
 
     private String studentName;
     private String studentNumber;
+
 }

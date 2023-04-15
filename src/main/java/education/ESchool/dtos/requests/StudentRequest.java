@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 public class StudentRequest {
 
 
+
     private String studentName;
+
     private String studentNumber;
+
+    private String password;
 }

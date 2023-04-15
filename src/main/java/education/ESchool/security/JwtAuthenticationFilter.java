@@ -1,7 +1,6 @@
 package education.ESchool.security;
 
 import education.ESchool.business.StudentService;
-import education.ESchool.dataAccess.StudentRepository;
 import education.ESchool.entities.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Student student = studentService.getStudentById(id.byteValue());
                 if (student != null) {
                     Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("student"));
-                    UserDetails userDetails = new JwtUserDetails((long) student.getStudentId(), student.getStudentName(), student.getStudentNumber(), authorities);
+                    UserDetails userDetails = new JwtUserDetails((long) student.getStudentId(), student.getStudentName(),  student.getPassword(),  authorities);
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);

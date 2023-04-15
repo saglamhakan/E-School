@@ -3,10 +3,7 @@ package education.ESchool.dtos.requests;
 import lombok.Data;
 
 @Data
-public class UpdateLessonRequest {
+public class UpdateOneStudentRequest {
 
-
-    private String lessonName;
-
-
+    private String studentName;
 }

@@ -1,13 +1,11 @@
 package education.ESchool.security;
 
-import education.ESchool.dtos.requests.StudentRequest;
 import education.ESchool.entities.Student;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class JwtUserDetails implements UserDetails {
     public static JwtUserDetails create(Student student) {
         List<GrantedAuthority> authoriesList = new ArrayList<>();
         authoriesList.add(new SimpleGrantedAuthority("user"));
-        return new JwtUserDetails((long) student.getStudentId(), student.getStudentName(), student.getStudentNumber(), authoriesList);
+        return new JwtUserDetails((long) student.getStudentId(), student.getStudentName(), student.getPassword(), authoriesList);
 
     }
 
